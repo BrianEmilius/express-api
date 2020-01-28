@@ -5,11 +5,12 @@ var {
 	deleteProduct,
 	updateProduct
 } = require("../controllers/product.controller");
+var { isAuthorized } = require("../middleware/authorize");
 
 module.exports = function(router) {
-	router.get("/v1/products", getAllProducts);
-	router.get("/v1/products/:id", getSingleProduct);
-	router.post("/v1/products", createProduct);
-	router.delete("/v1/products/:id", deleteProduct);
-	router.put("/v1/products/:id", updateProduct);
+	router.get("/api/v1/products", getAllProducts);
+	router.get("/api/v1/products/:id", getSingleProduct);
+	router.post("/api/v1/products", isAuthorized, createProduct);
+	router.delete("/api/v1/products/:id", isAuthorized, deleteProduct);
+	router.put("/api/v1/products/:id", isAuthorized, updateProduct);
 };

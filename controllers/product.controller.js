@@ -26,7 +26,7 @@ async function createProduct(req, res, next) {
 	}
 	try {
 		let product = await Product.create(req.fields);
-		res.json(product);
+		res.status(201).json(product);
 	} catch (error) {
 		console.error(error);
 		res.status(400).end();
