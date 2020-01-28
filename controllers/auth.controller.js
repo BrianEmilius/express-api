@@ -1,17 +1,27 @@
 var bcrypt = require("bcryptjs");
 var User = require("../models/user.model");
 var jwt = require("jsonwebtoken");
+var cache = require("memory-cache");
+var uuid = require("uuid/v1");
 
 async function getToken(req, res, next) {
 	try {
 		let token = await authenticateUser(req.fields.email, req.fields.password);
-		let refreshToken = "";
+		let refreshToken = uuid();
+		cache.put(req.fields.email, refreshToken);
 		res.json({ token, refreshToken });
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({
-			message: error
-		});
+		switch (error) {
+			case "User not found":
+				res.status(401).end();
+				break;
+			case "Email or password incorrect":
+				res.status(401).end();
+				break;
+			default:
+				res.status(500).end();
+		}
 	}
 }
 
