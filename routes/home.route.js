@@ -1,5 +1,5 @@
-var { getHome } = require("../controllers/home.controller");
+var { static } = require("express");
 
 module.exports = function(router) {
-	router.get("/", getHome);
+	router.use("/file-bucket", static("assets"));
 };
